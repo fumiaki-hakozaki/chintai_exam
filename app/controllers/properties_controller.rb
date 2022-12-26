@@ -8,15 +8,19 @@ class PropertiesController < ApplicationController
 
   # GET /properties/1 or /properties/1.json
   def show
+    @nearest_stations = @property.nearest_stations
   end
 
   # GET /properties/new
   def new
     @property = Property.new
+    2.times { @property.nearest_stations.build }
   end
 
   # GET /properties/1/edit
   def edit
+    @nearest_stations = @property.nearest_stations.count
+    @property.nearest_stations.build
   end
 
   # POST /properties or /properties.json
@@ -28,6 +32,7 @@ class PropertiesController < ApplicationController
         format.html { redirect_to @property, notice: "物件を登録しました" }
         format.json { render :show, status: :created, location: @property }
       else
+        2.times { @property.nearest_stations.build }
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @property.errors, status: :unprocessable_entity }
       end
@@ -41,6 +46,7 @@ class PropertiesController < ApplicationController
         format.html { redirect_to @property, notice: "編集をしました" }
         format.json { render :show, status: :ok, location: @property }
       else
+        @property.nearest_stations.build
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @property.errors, status: :unprocessable_entity }
       end
@@ -64,6 +70,6 @@ class PropertiesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def property_params
-      params.require(:property).permit(:property_name, :rent, :address, :age, :note)
+      params.require(:property).permit(:property_name, :rent, :address, :age, :note,nearest_stations_attributes: [:id, :root, :station, :time])
     end
 end
