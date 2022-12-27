@@ -1,6 +1,6 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: %i[ show edit update destroy ]
-
+  before_action :set_nearest_stations, only: [:show, :edit, :update]
   # GET /properties or /properties.json
   def index
     @properties = Property.all
@@ -19,14 +19,13 @@ class PropertiesController < ApplicationController
 
   # GET /properties/1/edit
   def edit
-    @nearest_stations = @property.nearest_stations.count
     @property.nearest_stations.build
   end
 
   # POST /properties or /properties.json
   def create
     @property = Property.new(property_params)
-
+    # @nearest_stations = @property.nearest_stations
     respond_to do |format|
       if @property.save
         format.html { redirect_to @property, notice: "物件を登録しました" }
@@ -68,8 +67,12 @@ class PropertiesController < ApplicationController
       @property = Property.find(params[:id])
     end
 
+     def set_nearest_stations
+      @nearest_stations = @property.nearest_stations
+    end
+
     # Only allow a list of trusted parameters through.
     def property_params
-      params.require(:property).permit(:property_name, :rent, :address, :age, :note,nearest_stations_attributes: [:id, :root, :station, :time])
+      params.require(:property).permit(:property_name, :rent, :address, :age, :note, nearest_stations_attributes: [:id, :root, :station, :time])
     end
 end

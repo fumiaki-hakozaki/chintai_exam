@@ -26,23 +26,22 @@
 </p>
 
 <hr>
-<% number = 0 %>
- <h2>最寄駅<% number += 1 %></h2>
+  <% number = 0 %>
+<% @property.nearest_stations.each do |nearest_station|%>
+  <h2>最寄駅<% number += 1 %></h2>
   <p>
     <strong>路線名:</strong>
-    <%= @nearest_station.root %>
     <%= nearest_station.root %>
   </p>
   <p>
     <strong>駅名:</strong>
-    <%= @nearest_station.station %>
     <%= nearest_station.station %>
   </p>
   <p>
     <strong>徒歩分数:</strong>
-    <%= @nearest_station.time %>
     <%= nearest_station.time %>
   </p>
+<% end %>
 
 
 <%= link_to '編集する', edit_property_path(@property) %> |

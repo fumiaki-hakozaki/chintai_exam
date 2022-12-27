@@ -1,4 +1,5 @@
 class Property < ApplicationRecord
-  has_many :nearest_stations
-  accepts_nested_attributes_for :nearest_stations, reject_if: :all_blank
+  has_many :nearest_stations, dependent: :destroy
+  accepts_nested_attributes_for :nearest_stations
+  validates :property_name, :rent, :address, :age, presence: true
 end
